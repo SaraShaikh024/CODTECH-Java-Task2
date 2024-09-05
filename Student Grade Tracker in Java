@@ -1,0 +1,118 @@
+//Student Grade Tracker 
+//Develop a Java program to track and manage student grades. The program should allow the user to input grades for different subjects or assignments, calculate the average grade, and display the overall grade along with any additional information (such as letter grade or GPA).
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class StudentGradeTracker {
+    
+    // To store the grades and their corresponding subjects
+    private static ArrayList<SubjectGrade> grades = new ArrayList<>();
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+        
+        do {
+            System.out.println("\nStudent Grade Tracker");
+            System.out.println("1. Add Grade");
+            System.out.println("2. Display Grades");
+            System.out.println("3. Calculate Average");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            
+            choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline
+            
+            switch (choice) {
+                case 1:
+                    addGrade(scanner);
+                    break;
+                case 2:
+                    displayGrades();
+                    break;
+                case 3:
+                    calculateAverage();
+                    break;
+                case 4:
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please enter a number between 1 and 4.");
+                    break;
+            }
+        } while (choice != 4);
+        
+        scanner.close();
+    }
+    
+    // Method to add a grade
+    private static void addGrade(Scanner scanner) {
+        System.out.print("Enter subject name: ");
+        String subject = scanner.nextLine();
+        System.out.print("Enter grade: ");
+        double grade = scanner.nextDouble();
+        scanner.nextLine();  // Consume newline
+        
+        grades.add(new SubjectGrade(subject, grade));
+        System.out.println("Grade added successfully.");
+    }
+    
+    // Method to display all grades
+    private static void displayGrades() {
+        if (grades.isEmpty()) {
+            System.out.println("No grades available.");
+            return;
+        }
+        
+        System.out.println("\nGrades:");
+        for (SubjectGrade sg : grades) {
+            System.out.println("Subject: " + sg.getSubject() + ", Grade: " + sg.getGrade());
+        }
+    }
+    
+    // Method to calculate the average grade
+    private static void calculateAverage() {
+        if (grades.isEmpty()) {
+            System.out.println("No grades available to calculate average.");
+            return;
+        }
+        
+        double sum = 0;
+        for (SubjectGrade sg : grades) {
+            sum += sg.getGrade();
+        }
+        
+        double average = sum / grades.size();
+        System.out.println("Average Grade: " + average);
+        System.out.println("Letter Grade: " + getLetterGrade(average));
+    }
+    
+    // Method to determine the letter grade based on the average
+    private static String getLetterGrade(double average) {
+        if (average >= 90) return "A";
+        else if (average >= 80) return "B";
+        else if (average >= 70) return "C";
+        else if (average >= 60) return "D";
+        else return "F";
+    }
+}
+
+// Class to represent a subject and its corresponding grade
+class SubjectGrade {
+    private String subject;
+    private double grade;
+    
+    public SubjectGrade(String subject, double grade) {
+        this.subject = subject;
+        this.grade = grade;
+    }
+    
+    public String getSubject() {
+        return subject;
+    }
+    
+    public double getGrade() {
+        return grade;
+    }
+}
